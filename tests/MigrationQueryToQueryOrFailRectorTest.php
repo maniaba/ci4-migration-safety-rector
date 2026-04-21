@@ -12,15 +12,15 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 /**
  * @internal
  *
- * Testira {@see MigrationQueryToQueryOrFailRector}.
+ * Tests {@see MigrationQueryToQueryOrFailRector}.
  *
- * Slucajevi:
- *  1. Jednostavan unassigned query() u migraciji -> zamjenjen sa queryOrFail()
- *  2. Vise unassigned query() poziva -> svi zamjenjeni
- *  3. Assigned query() (SELECT) -> ostaje $this->db->query()
- *  4. Klasa izvan Database/Migrations direktorija -> rule se ne primjenjuje
- *  5. query() na drugom objektu ($this->forge) -> ne mijenja se
- *  6. Mjesovit slucaj: assigned + unassigned -> samo unassigned se zamjenjuje
+ * Cases:
+ *  1. Simple unassigned query() in a migration -> replaced with queryOrFail()
+ *  2. Multiple unassigned query() calls -> all replaced
+ *  3. Assigned query() (SELECT) -> remains $this->db->query()
+ *  4. Class outside the Database/Migrations directory -> rule is not applied
+ *  5. query() on another object ($this->forge) -> unchanged
+ *  6. Mixed case: assigned + unassigned -> only unassigned is replaced
  */
 final class MigrationQueryToQueryOrFailRectorTest extends AbstractRectorTestCase
 {
@@ -35,27 +35,27 @@ final class MigrationQueryToQueryOrFailRectorTest extends AbstractRectorTestCase
      */
     public static function provideData(): Iterator
     {
-        yield 'jednostavan unassigned query se zamjenjuje' => [
+        yield 'simple unassigned query is replaced' => [
             __DIR__ . '/Fixtures/Database/Migrations/single_query_replaced.php.inc',
         ];
 
-        yield 'visestruki unassigned queryi se svi zamjenjuju' => [
+        yield 'multiple unassigned queries are all replaced' => [
             __DIR__ . '/Fixtures/Database/Migrations/multiple_queries_replaced.php.inc',
         ];
 
-        yield 'assigned query (SELECT) ostaje, unassigned se zamjenjuje' => [
+        yield 'assigned query (SELECT) stays, unassigned is replaced' => [
             __DIR__ . '/Fixtures/Database/Migrations/assigned_query_not_replaced.php.inc',
         ];
 
-        yield 'query() izvan migrations direktorija se ne zamjenjuje' => [
+        yield 'query() outside migrations directory is not replaced' => [
             __DIR__ . '/Fixtures/NonMigration/outside_migration_not_replaced.php.inc',
         ];
 
-        yield 'query() na $this->forge ne smije biti zamjenjen' => [
+        yield 'query() on $this->forge must not be replaced' => [
             __DIR__ . '/Fixtures/Database/Migrations/other_object_query_not_replaced.php.inc',
         ];
 
-        yield 'mjesovit slucaj: samo unassigned queryi se zamjenjuju' => [
+        yield 'mixed case: only unassigned queries are replaced' => [
             __DIR__ . '/Fixtures/Database/Migrations/mixed_assigned_and_free_query.php.inc',
         ];
     }
@@ -65,4 +65,3 @@ final class MigrationQueryToQueryOrFailRectorTest extends AbstractRectorTestCase
         return __DIR__ . '/config/rector_rule.php';
     }
 }
-
