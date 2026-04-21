@@ -1,0 +1,9 @@
+vendor/
+build/
+.php-cs-fixer.cache
+.phpunit.result.cache
+
+!/build/
+
+# Project exclude paths
+/build/
