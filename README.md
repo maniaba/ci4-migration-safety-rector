@@ -45,7 +45,7 @@ $result = $this->db->query('SELECT COUNT(*) FROM `orders`');
 ## Installation
 
 ```bash
-composer require --dev maniaba/platforma-rector
+composer require --dev maniaba/ci4-migration-safety-rector
 ```
 
 ## Usage
@@ -70,7 +70,7 @@ While developing locally alongside the main project, add to the main project's `
     "repositories": [
         {
             "type": "path",
-            "url": "./platforma-rector"
+            "url": "./ci4-migration-safety-rector"
         }
     ],
     "require-dev": {
@@ -79,7 +79,7 @@ While developing locally alongside the main project, add to the main project's `
 }
 ```
 
-Then run `composer update maniaba/platforma-rector`.
+Then run `composer update maniaba/ci4-migration-safety-rector`.
 
 ## Running tests
 
